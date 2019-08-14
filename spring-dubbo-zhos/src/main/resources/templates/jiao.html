@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:iconCls="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<!-- 导入	JQuery -->
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+
+<!--导入easyui  -->
+<script type="text/javascript" src="../js/easyui1.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui1.5/locale/easyui-lang-zh_CN.js"></script>
+
+<link rel="stylesheet" href="../js/easyui1.5/themes/default/easyui.css"></link>
+<link rel="stylesheet" href="../js/easyui1.5/themes/icon.css"></link>
+<body>
+
+<table title="角色" class="easyui-datagrid" pagination="true" pageList="[2,4,8]" fitColumns="true"
+       url="../tree/jiao" >
+    <thead>
+    <tr>
+        <th data-options="field:'id' ">ID</th>
+        <th data-options="field:'js' ">角色权限</th>
+        <th data-options="field:'text' ">职位</th>
+        <th data-options="field:'h' ,formatter:update1">操作</th>
+    </tr>
+    </thead>
+
+</table>
+
+<div id="div2"  title="权限修改" class="easyui-dialog" closed="true" style="width:300px;height:350px;">
+    <url id="jiaose"></url>
+    <a href="javascript:addjs()" class="easyui-linkbutton" > 提交 </a>
+</div>
+</body>
+<script type="text/javascript">
+    //按钮
+    update1=function(value,row,index){
+
+        return   '<a href="javascript:update2('+row.id+')" class="easyui-linkbutton" iconCls:"icon-cancel"> 角色权限 </a>';
+    }
+
+    var  jid;  //将角色id定为全局变量 共所有方法使用
+    //查 回显
+    update2=function(id){
+        alert(id)
+        jid = id;  //id赋给jid全局
+        $("#div2").dialog("open");
+        $("#jiaose").tree({
+            url:"../tree/xian?id="+id,
+            checkbox:true,   //加  复选框
+            cascadeCheck:false,  // 去掉 父子节点 级联 直接展示
+        })
+    }
+
+    //获取选中id
+    caidanid=function(){
+        var id=  $("#jiaose").tree("getChecked") //获取所选中的id
+        var ids="";
+        for (var i = 0; i < id.length; i++) {
+            ids +="," + id[i].id;
+        }
+        var ids=ids.substr(1);
+        return  ids;  //调用此方法时返回获得id
+    }
+
+    //修改  角色权限（删增）
+    addjs=function(){
+        var ids=caidanid();
+
+        $.ajax({
+            url:"<%=request.getContextPath() %>/yjc/updatejs.do",
+            type:"post",
+            data:{ids:ids,jid:jid},
+            success:function(){
+                $("#div2").dialog("close"); //成功后关闭弹框
+            }
+        })
+    }
+</script>
+</html>

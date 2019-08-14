@@ -1,0 +1,30 @@
+<script type="text/javascript" src="../../js/my97/WdatePicker.js"></script>
+
+
+开始<input class='Wdate' id="searchStartTime" type="text" style="width:160px" 
+                               onclick="WdatePicker({startDate:'%y-%M-%d %H:%m:%s',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'searchEndTime\')}'})" />
+结束<input class='Wdate' id="searchEndTime" type="text" style="width:160px" 
+                                onclick="WdatePicker({startDate:'%y-%M-%d %H:%m:%s',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'searchStartTime\')}'})" />
+
+
+
+
+<input class='Wdate' name="goods.createTime" type="text" style="width:160px" 
+	onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+
+
+
+
+
+a)dateFmt:格式化属性
+	i.显示年：dateFmt:'yyyy'
+	ii.显示年月：dateFmt:'yyyyMM'
+	iii.显示年月日时分秒：dateFmt:'yyyyMMdd HH:mm:ss'
+	iv.格式化:年月日时分秒：dateFmt:'yyyy年MM月dd日 HH时:mm分:ss秒'
+b)设置只读：readOnly:true
+c)隐藏清空按钮：isShowClear:false
+d)	设置今天为最小日期：minDate:new Date()
+	i.设置明天为最小日期：minDate:'%y-%M-{%d+1}'
+e)设置今天为最大日期：maxDate:new Date()
+	i.只能选择本月第一天到最后一天：minDate:'%y-%M-01',maxDate:'%y-%M-%ld'
+f)显示周:isShowWeek:true

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- 导入	JQuery -->
+    <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+
+    <!--导入easyui  -->
+    <script type="text/javascript" src="../js/easyui1.5/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../js/easyui1.5/locale/easyui-lang-zh_CN.js"></script>
+
+    <link rel="stylesheet" href="../js/easyui1.5/themes/default/easyui.css"></link>
+    <link rel="stylesheet" href="../js/easyui1.5/themes/icon.css"></link>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'north',title:'北部',split:true" style="height:100px;">
+
+    <h1><center>欢迎<span id="us"></span>登录,预约状态<span id="as"></span></center></h1>
+</div>
+<div data-options="region:'west',title:'West',split:true" style="width:170px;">
+    <ul id="TreeMenus"></ul>
+</div>
+<div data-options="region:'center'" id style="padding:5px;background:#eee;">
+    <div id="MenusTabs" class="easyui-tabs" data-options="fit:true" style="width:500px;height:250px;">
+    </div>
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+    $("#TreeMenus").tree({
+        //查树
+        url:'../tree/shu',
+        //虚线
+        lines:true,
+
+        onClick:function(node){
+            if(node.children.length<=0){
+                if(!$("#MenusTabs").tabs('exists',node.text)){
+                    $("#MenusTabs").tabs('add',{
+                        title:node.text,
+                        content:createIframe(node.url),
+                        closable:true,
+
+
+                    })
+
+                }else{
+                    $("#MenusTabs").tabs('selects',node.text)
+
+                }
+
+            }
+
+        }
+
+
+    })
+    function createIframe(url){
+
+        return '<iframe scrolling="auto" frameborder="0"  src="'+'../'+ url + '" style="width:100%;height:100%;"></iframe>';
+    }
+</script>
+
+
+</html>

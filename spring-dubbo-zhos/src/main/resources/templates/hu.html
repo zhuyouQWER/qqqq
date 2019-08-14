@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<!-- 导入	JQuery -->
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+
+<!--导入easyui  -->
+<script type="text/javascript" src="../js/easyui1.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui1.5/locale/easyui-lang-zh_CN.js"></script>
+
+<link rel="stylesheet" href="../js/easyui1.5/themes/default/easyui.css"></link>
+<link rel="stylesheet" href="../js/easyui1.5/themes/icon.css"></link>
+<body>
+
+<div id="cc" class="easyui-layout"   data-options="fit:true"   style="width:600px;height:400px;">
+    <div  data-options="region:'north',title:'North   Title',split:true" style="height:100px;">
+
+    </div>
+    <div data-options="region:'center'"   style="padding:5px;background:#eee;">
+        <div id="showTabsId"   data-options="fit:true"class="easyui-tabs"   style="width:500px;height:250px;">
+            <table id="dg1"></table>
+        </div>
+    </div>
+</div>
+<div id="dd"></div>
+</body>
+<script>
+
+
+    $(function(){
+        queryUs();
+    })
+    function queryUs(){
+        $('#dg1').datagrid({
+            url:'../tree/hu',
+            fitColumns:true,
+            toolbar: [{
+                iconCls: 'icon-remove',
+                text:"删除",
+                handler: function(){
+                    var  arr=$('#dg1').datagrid('getSelections');
+                    var a="";
+                    var count=0;
+                    for(var i=0;i<arr.length;i++){
+                        a+=","+arr[i].id
+                        count++;
+                    }
+                    ids=a.substr(1);
+                    if(a==""){
+                        $.messager.alert('警告','请选择数据','error');
+                    }else{
+                        $.messager.confirm('确认','您确认想要删除这'+count+'条记录吗？',function(r){
+                            if (r){
+                                $.ajax({
+                                    url:"../use/del?id="+ids,
+                                    type:"post",
+                                    success:function(data){
+                                        $("#dg1").datagrid('reload');
+                                        $.messager.show({
+                                            title:'提示',
+                                            msg:'删除成功',
+                                            timeout:500,
+                                            showType:'slide'
+                                        });
+                                    }
+                                })
+                            }
+                        });
+                    }
+                }
+            },'-',{
+                iconCls: 'icon-save',
+                text:"新增",
+                handler: function(){
+                    $('#dd').dialog({
+                        title: '新增',
+                        width: 400,
+                        height: 200,
+                        closed: false,
+                        cache: false,
+                        href:  "../use/xin1",
+                        modal: true,
+                        buttons:[{
+                            text:'保存',
+                            handler:function(){
+                                $.ajax({
+                                    url:"../use/xin",
+                                    type:"post",
+                                    data:$("#addFormId").serialize(),
+                                    success:function(data){
+                                        $('#dd').window('close');
+                                        $("#dg1").datagrid('reload');
+                                        $.messager.show({
+                                            title:'提示',
+                                            msg:'保存成功',
+                                            timeout:500,
+                                            showType:'slide'
+                                        });
+                                    }
+                                })
+                            }
+                        },{
+                            text:'关闭',
+                            handler:function(){
+                                $('#dd').window('close');
+                            }
+                        }]
+                    });
+                }
+            },'-',{
+                iconCls: 'icon-save',
+                text:"修改",
+                handler: function(){
+                    var  arr=$('#dg1').datagrid('getSelections');
+                    var a="";
+                    var count=0;
+                    for(var i=0;i<arr.length;i++){
+                        a+=","+arr[i].id
+                        count++;
+                    }
+                    ids=a.substr(1);
+                    if(count!=1){
+                        $.messager.alert('警告','请选择数据','error');
+                    }else{
+                        $('#dd').dialog({
+                            title: '修改',
+                            width: 400,
+                            height: 200,
+                            closed: false,
+                            cache: false,
+                            href:  "../use/xiu1?id="+ids,
+                            modal: true,
+                            buttons:[{
+                                text:'保存',
+                                handler:function(){
+                                    $.ajax({
+                                        url:"../use/xiu",
+                                        type:"post",
+                                        data:$("#addFormId").serialize(),
+                                        success:function(){
+                                            $('#dd').window('close');
+                                            $("#dg1").datagrid('reload');
+                                            $.messager.show({
+                                                title:'提示',
+                                                msg:'保存成功',
+                                                timeout:500,
+                                                showType:'slide'
+                                            })
+                                        }
+                                    })
+                                }
+                            },{
+                                text:'关闭',
+                                handler:function(){
+                                    $('#dd').window('close');
+                                }
+                            }]
+                        });
+                    }
+                }
+            }],
+            loadMsg:"玩命加载中",
+            striped:true,
+            method:"post",
+            rownumbers:true,
+            ctrlSelect:true,
+            checkOnSelect:false,
+            pagination:true,
+            pageNumber:1,
+            pageSize:5,
+            remoteSort: false,
+            pageList:[1,2,3,4,5],
+            columns:[
+                [
+                    {field:'id',title:'ID',width:100},
+                    {field:'uid',title:'用户ID',width:100},
+                    {field:'jid',title:'角色ID',width:100},
+
+
+                ]
+            ]
+        });
+    }
+</script>
+</html>

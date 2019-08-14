@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<!-- 导入	JQuery -->
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+
+<!--导入easyui  -->
+<script type="text/javascript" src="../js/easyui1.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui1.5/locale/easyui-lang-zh_CN.js"></script>
+
+<link rel="stylesheet" href="../js/easyui1.5/themes/default/easyui.css"></link>
+<link rel="stylesheet" href="../js/easyui1.5/themes/icon.css"></link>
+<body>
+<table  title="用户" id="data" class="easyui-datagrid" pagination="true" pageList="[2,4,8]" fitColumns="true"
+        url="../tree/yong" >
+    <thead>
+    <tr>
+        <th data-options="field:'id' ">ID</th>
+        <th data-options="field:'username' ">用户名</th>
+        <th data-options="field:'password' ">密码</th>
+        <th data-options="field:'1',formatter:update1">绑定角色</th>
+    </tr>
+    </thead>
+</table>
+
+<div id="div2" title="权限修改" class="easyui-dialog" closed="true" style="width:300px;height:200px;">
+    <url id="yonghu"></url>
+    <a href="javascript:addyh()" class="easyui-linkbutton" > 提交 </a>
+</div>
+</body>
+<script type="text/javascript">
+    //按钮
+    update1=function(value,row,index){
+        var aa='<a href="javascript:update2('+row.id+')" class="easyui-linkbutton" iconCls:"icon-cancel"> 用户权限 </a> |';
+        aa += '<a href="javascript:deleteuser('+row.id+')" class="easyui-linkbutton" iconCls:"icon-cancel"> 删除 </a>'
+        return   aa;
+    }
+
+    //查 回显
+    update2=function(){
+
+    }
+
+    var  uid;  //将角色id定为全局变量 共所有方法使用
+    //查 回显
+    update2=function(id){
+
+        uid = id;  //id赋给jid全局
+        $("#div2").dialog("open");  //打开弹框
+        $("#yonghu").tree({
+            url:"<%=request.getContextPath() %>/yjc/yhSelect.do?id="+id,
+            checkbox:true,   //加  复选框
+            cascadeCheck:false,  // 去掉 父子节点 级联 直接展示
+        })
+    }
+
+    //获取选中id
+    jiaoseid=function(){
+        var id=  $("#yonghu").tree("getChecked") //获取所选中的id
+
+        var ids="";
+        for (var i = 0; i < id.length; i++) {
+            ids +="," + id[i].id;
+        }
+        var ids=ids.substr(1);
+        return  ids;  //调用此方法时返回获得id
+    }
+
+    //修改  用户权限（删增）
+    addyh=function(){
+        var ids=jiaoseid();
+
+        $.ajax({
+            url:"<%=request.getContextPath() %>/yjc/updateyh.do",
+            type:"post",
+            data:{ids:ids,uid:uid},
+            success:function(){
+                $("#div2").dialog("close"); //成功后关闭弹框
+            }
+        })
+    }
+
+    //删除
+    deleteuser=function(id){
+        if(confirm("确定删除这个用户吗？")){
+            $.ajax({
+                url:"<%=request.getContextPath() %>/yjc/deleteuser.do",
+                type:"post",
+                data:{id:id},
+                success:function(){
+                    $("#data").datagrid('reload'); //刷新数据
+                }
+            })
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <!-- 导入	JQuery -->
+    <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<center><span id="zhu"></span></center>
+<form id="myform">
+    <table align="center">
+        <tr>
+            <td>用户名</td>
+            <td><input name="username"></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input name="password"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input th:type="button" th:value="登录" onclick="deng()"></td>
+        </tr>
+    </table>
+
+</form>
+</body>
+<script type="text/javascript">
+    function deng(){
+
+        $.ajax({
+            url:"../tree/den",
+            data:$("#myform").serialize(),
+            type:"post",
+            success:function(date){
+                if(date=='cuo'){
+                    $("#zhu").html("<th:font color='red'>用户名或密码不存在</th:font>")
+
+
+                }else{
+
+                    location.href="../tree/shu1";
+                }
+
+
+
+            }
+
+        })
+    }
+
+</script>
+</html>
