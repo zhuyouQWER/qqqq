@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+</head>
+<body>
+<input type="button" value="导出Excel" onclick="exportExcel()">
+
+<form action="../user/importExcel" method="post" enctype="multipart/form-data" >
+    <input type="file" name="file"/>
+    <input type="submit" value="导入excel"/>
+</form>
+<table border="1">
+    <tr>
+        <td>id</td>
+        <td>name</td>
+        <td>date</td>
+
+    </tr>
+    <tr th:each="book:${l}">
+        <td th:text="${book.id}">id</td>
+        <td th:text="${book.username}">name</td>
+        <td th:text="${book.password}">date</td>
+    </tr>
+</table>
+<script>
+   function exportExcel() {
+
+       location.href="../user/dao";
+   }
+
+
+
+    
+</script>
+</body>
+</html>

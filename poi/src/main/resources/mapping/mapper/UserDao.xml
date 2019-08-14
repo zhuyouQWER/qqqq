@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.UserDao" >
+  <select id="cha" resultType="User">
+
+      select * from z_user
+  </select>
+    <insert id="xin" >
+    insert  into z_user(username,password) values
+    <foreach collection="list" item="c" separator="," >
+
+        (#{c.username},#{c.password})
+    </foreach>
+
+    </insert>
+</mapper>
