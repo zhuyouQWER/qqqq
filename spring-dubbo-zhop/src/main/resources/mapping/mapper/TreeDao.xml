@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.TreeDao" >
+   <select id="den" resultType="model.User" >
+
+  select  * from z_user where username=#{username} and password=#{password}
+   </select>
+    <select id="shu" resultType="model.Tree" parameterType="Integer">
+      select t.* from z_user u,z_jse j,z_uj uj,z_jq jq, f_tree t where u.id=uj.uid and j.id=uj.jid and j.id=jq.jid and jq.qid=t.id and u.id=#{id}
+    </select>
+    <select id="zong" resultType="java.lang.Integer">
+
+        select count(*) from z_user
+    </select>
+    <select id="yong" resultType="model.User">
+
+        select * from z_user limit #{start},#{rows}
+    </select>
+    <select id="jzong" resultType="java.lang.Integer">
+
+        select count(*) from z_jse
+    </select>
+    <select id="jyong" resultType="model.Jiao">
+
+        select * from z_jse limit #{start},#{rows}
+    </select>
+    <select id="qzong" resultType="java.lang.Integer">
+
+        select count(*) from z_jq
+    </select>
+    <select id="qyong" resultType="model.Jq">
+
+        select * from z_jq limit #{start},#{rows}
+    </select>
+    <select id="xzong" resultType="java.lang.Integer">
+
+        select count(*) from f_tree
+    </select>
+    <select id="xyong" resultType="model.Tree">
+
+        select * from f_tree limit #{start},#{rows}
+    </select>
+    <select id="hzong" resultType="java.lang.Integer">
+
+        select count(*) from z_uj
+    </select>
+    <select id="hyong" resultType="model.Uj">
+
+        select * from z_uj limit #{start},#{rows}
+    </select>
+</mapper>
